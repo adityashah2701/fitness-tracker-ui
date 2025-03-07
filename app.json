@@ -29,6 +29,9 @@
       "eas": {
         "projectId": "43de3650-0ec7-4a71-9ecf-4c05284d300b"
       }
+    },
+    "android": {
+      "package": "com.adityashah2701.fitnesstracker"
     }
   }
 }

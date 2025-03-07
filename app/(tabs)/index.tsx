@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   statCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+   
     padding: 16,
     borderRadius: 16,
     alignItems: 'center',
