@@ -19,6 +19,7 @@ export default function RootLayout() {
 }
 
 // Redirect from root to login
+//
 export function Root() {
   return <Redirect href="/login" />;
 }

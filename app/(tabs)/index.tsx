@@ -32,8 +32,8 @@ export default function Home() {
       >
         <View style={styles.headerTop}>
           <View>
-            <Text style={styles.greeting}>Good Morning, John!</Text>
-            <Text style={styles.date}>Monday, January 15</Text>
+            <Text style={styles.greeting}>Good Morning!</Text>
+            <Text style={styles.date}>Monday, January 17</Text>
           </View>
           <View style={styles.headerActions}>
             <TouchableOpacity style={styles.iconButton}>

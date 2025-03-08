@@ -2,11 +2,12 @@ import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, SafeAreaVi
 import { LinearGradient } from 'expo-linear-gradient';
 import { Settings, Edit, ChevronRight, User, Mail, Phone, MapPin, Calendar, Globe, Shield, HelpCircle, Info, LogOut, Home, BarChart2, Bell } from 'lucide-react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
+import { router } from 'expo-router';
 
 export default function Profile() {
   const userDetails = {
-    name: "John Doe",
-    email: "john.doe@example.com",
+    name: "Tanmay Mirgal",
+    email: "tanmaymirgal26@gmail.com",
     phone: "+91 1234567890",
     location: "Mumbai, India",
     dateJoined: "08 March 2025",
@@ -94,7 +95,7 @@ export default function Profile() {
               </View>
             </View>
             
-            <TouchableOpacity style={styles.editProfileButton}>
+            <TouchableOpacity style={styles.editProfileButton}  onPress={() => router.push('/')}>
               <Text style={styles.editProfileText}>Edit Profile</Text>
             </TouchableOpacity>
           </View>
@@ -102,7 +103,7 @@ export default function Profile() {
           <Animated.View entering={FadeIn.delay(100)}>
             <Text style={styles.sectionHeaderText}>Account Settings</Text>
             <View style={styles.settingsContainer}>
-              <TouchableOpacity style={styles.settingItem}>
+              <TouchableOpacity style={styles.settingItem}  onPress={() => router.push('/')}>
                 <View style={styles.settingLeft}>
                   <View style={[styles.iconCircle, {backgroundColor: 'rgba(0, 230, 118, 0.2)'}]}>
                     <Edit size={18} color="#00e676" />
@@ -112,7 +113,7 @@ export default function Profile() {
                 <ChevronRight size={20} color="#8c9eff" />
               </TouchableOpacity>
               
-              <TouchableOpacity style={styles.settingItem}>
+              <TouchableOpacity style={styles.settingItem}  onPress={() => router.push('/(tabs)/notifications')}>
                 <View style={styles.settingLeft}>
                   <View style={[styles.iconCircle, {backgroundColor: 'rgba(41, 182, 246, 0.2)'}]}>
                     <Bell size={18} color="#29b6f6" />
@@ -122,7 +123,7 @@ export default function Profile() {
                 <ChevronRight size={20} color="#8c9eff" />
               </TouchableOpacity>
               
-              <TouchableOpacity style={styles.settingItem}>
+              <TouchableOpacity style={styles.settingItem}  onPress={() => router.push('/')}>
                 <View style={styles.settingLeft}>
                   <View style={[styles.iconCircle, {backgroundColor: 'rgba(156, 39, 176, 0.2)'}]}>
                     <Shield size={18} color="#9c27b0" />
@@ -137,7 +138,7 @@ export default function Profile() {
           <Animated.View entering={FadeIn.delay(200)}>
             <Text style={styles.sectionHeaderText}>More</Text>
             <View style={styles.settingsContainer}>
-              <TouchableOpacity style={styles.settingItem}>
+              <TouchableOpacity style={styles.settingItem}  onPress={() => router.push('/')}>
                 <View style={styles.settingLeft}>
                   <View style={[styles.iconCircle, {backgroundColor: 'rgba(255, 160, 0, 0.2)'}]}>
                     <HelpCircle size={18} color="#ffa000" />
@@ -147,7 +148,7 @@ export default function Profile() {
                 <ChevronRight size={20} color="#8c9eff" />
               </TouchableOpacity>
               
-              <TouchableOpacity style={styles.settingItem}>
+              <TouchableOpacity style={styles.settingItem}  onPress={() => router.push('/')}>
                 <View style={styles.settingLeft}>
                   <View style={[styles.iconCircle, {backgroundColor: 'rgba(66, 165, 245, 0.2)'}]}>
                     <Info size={18} color="#42a5f5" />
@@ -157,7 +158,7 @@ export default function Profile() {
                 <ChevronRight size={20} color="#8c9eff" />
               </TouchableOpacity>
               
-              <TouchableOpacity style={[styles.settingItem, {borderBottomWidth: 0}]}>
+              <TouchableOpacity style={[styles.settingItem, {borderBottomWidth: 0}]}  onPress={() => router.push('/(auth)/login')}>
                 <View style={styles.settingLeft}>
                   <View style={[styles.iconCircle, {backgroundColor: 'rgba(239, 83, 80, 0.2)'}]}>
                     <LogOut size={18} color="#ef5350" />
