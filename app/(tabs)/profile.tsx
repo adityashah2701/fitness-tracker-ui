@@ -95,7 +95,7 @@ export default function Profile() {
               </View>
             </View>
             
-            <TouchableOpacity style={styles.editProfileButton}  onPress={() => router.push('/')}>
+            <TouchableOpacity style={styles.editProfileButton}  onPress={() => router.push('/screens/edit')}>
               <Text style={styles.editProfileText}>Edit Profile</Text>
             </TouchableOpacity>
           </View>
@@ -103,15 +103,7 @@ export default function Profile() {
           <Animated.View entering={FadeIn.delay(100)}>
             <Text style={styles.sectionHeaderText}>Account Settings</Text>
             <View style={styles.settingsContainer}>
-              <TouchableOpacity style={styles.settingItem}  onPress={() => router.push('/')}>
-                <View style={styles.settingLeft}>
-                  <View style={[styles.iconCircle, {backgroundColor: 'rgba(0, 230, 118, 0.2)'}]}>
-                    <Edit size={18} color="#00e676" />
-                  </View>
-                  <Text style={styles.settingText}>Account Details</Text>
-                </View>
-                <ChevronRight size={20} color="#8c9eff" />
-              </TouchableOpacity>
+              
               
               <TouchableOpacity style={styles.settingItem}  onPress={() => router.push('/(tabs)/notifications')}>
                 <View style={styles.settingLeft}>
@@ -123,7 +115,7 @@ export default function Profile() {
                 <ChevronRight size={20} color="#8c9eff" />
               </TouchableOpacity>
               
-              <TouchableOpacity style={styles.settingItem}  onPress={() => router.push('/')}>
+              <TouchableOpacity style={styles.settingItem}  onPress={() => router.push('/screens/privacy')}>
                 <View style={styles.settingLeft}>
                   <View style={[styles.iconCircle, {backgroundColor: 'rgba(156, 39, 176, 0.2)'}]}>
                     <Shield size={18} color="#9c27b0" />
@@ -138,7 +130,7 @@ export default function Profile() {
           <Animated.View entering={FadeIn.delay(200)}>
             <Text style={styles.sectionHeaderText}>More</Text>
             <View style={styles.settingsContainer}>
-              <TouchableOpacity style={styles.settingItem}  onPress={() => router.push('/')}>
+              <TouchableOpacity style={styles.settingItem}  onPress={() => router.push('/screens/help')}>
                 <View style={styles.settingLeft}>
                   <View style={[styles.iconCircle, {backgroundColor: 'rgba(255, 160, 0, 0.2)'}]}>
                     <HelpCircle size={18} color="#ffa000" />
