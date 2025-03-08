@@ -1,54 +1,112 @@
-import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, StatusBar } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { CheckSquare, Square, ArrowRight } from 'lucide-react-native';
+import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
+import { router } from 'expo-router';
 
-const About = () => (
-  <LinearGradient colors={['#1E3C72', '#2A5298']} style={styles.container}>
-    <View style={styles.card}>
-      <Image source={{ uri: 'https://via.placeholder.com/100' }} style={styles.image} />
-      <Text style={styles.title}>About Us</Text>
-      <Text style={styles.text}>
-        Welcome to our app! We are dedicated to providing the best user experience with modern UI
-        and seamless functionality.
-      </Text>
-    </View>
-  </LinearGradient>
-);
+const About = () => {
+  const [checked, setChecked] = useState(false);
+
+  return (
+    <LinearGradient colors={['#0d1b2a', '#1b263b']} style={styles.container}>
+      {/* <Text style={{color: '#fff', fontSize: 30}}>About</Text> */}
+      <StatusBar barStyle="light-content" />
+      
+      <Animated.View entering={FadeInUp.duration(500)} style={styles.header}>
+        <Text style={styles.title}>Welcome to Astra</Text>
+        <Text style={styles.subtitle}>Your AI-powered fitness companion</Text>
+      </Animated.View>
+
+      <Animated.View entering={FadeIn.delay(200).duration(600)} style={styles.content}>
+        <Text style={styles.description}>
+          Astra helps you achieve your fitness goals with personalized plans, real-time progress tracking, and AI-driven insights.
+        </Text>
+
+        <Text style={styles.description}>
+          Whether you’re looking to build strength, improve endurance, or stay active, Astra is here to guide you every step of the way.
+        </Text>
+
+        <TouchableOpacity 
+          style={styles.checkboxContainer} 
+          onPress={() => setChecked(!checked)}
+        >
+          {checked ? <CheckSquare size={28} color="#00df9a" /> : <Square size={28} color="#ffffff" />}
+          <Text style={styles.checkboxText}>I commit to my fitness journey</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={[styles.button, !checked && styles.buttonDisabled]} disabled={!checked}
+         onPress={() => {router.push('/(tabs)') }}>
+          <Text style={styles.buttonText}>Get Started</Text>
+          <ArrowRight size={22} color="#fff" />
+        </TouchableOpacity>
+      </Animated.View>
+    </LinearGradient>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 20,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  card: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    padding: 20,
-    borderRadius: 15,
+  header: {
     alignItems: 'center',
-    width: '85%',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-  },
-  image: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 10,
+    marginBottom: 30,
   },
   title: {
-    fontSize: 24,
+    fontSize: 32,
     fontWeight: 'bold',
     color: '#fff',
-    marginBottom: 10,
+    letterSpacing: 1,
   },
-  text: {
+  subtitle: {
     fontSize: 16,
-    color: '#fff',
+    color: '#a8b3cf',
+    marginTop: 6,
+  },
+  content: {
+    width: '100%',
+    alignItems: 'center',
+  },
+  description: {
+    fontSize: 16,
     textAlign: 'center',
-    lineHeight: 22,
+    color: '#e5e7eb',
+    lineHeight: 24,
+    marginBottom: 15,
+  },
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 20,
+    marginBottom: 30,
+  },
+  checkboxText: {
+    fontSize: 16,
+    color: '#ffffff',
+    marginLeft: 10,
+  },
+  button: {
+    flexDirection: 'row',
+    backgroundColor: '#00df9a',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '80%',
+  },
+  buttonDisabled: {
+    backgroundColor: '#4a5568',
+  },
+  buttonText: {
+    fontSize: 18,
+    color: '#fff',
+    fontWeight: 'bold',
+    marginRight: 10,
   },
 });
 
