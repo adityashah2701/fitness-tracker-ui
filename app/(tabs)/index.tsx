@@ -32,7 +32,7 @@ export default function Home() {
       >
         <View style={styles.headerTop}>
           <View>
-            <Text style={styles.greeting}>Good Morning!</Text>
+            <Text style={styles.greeting}>Good Morning! John</Text>
             <Text style={styles.date}>Monday, January 17</Text>
           </View>
           <View style={styles.headerActions}>
@@ -238,14 +238,9 @@ const styles = StyleSheet.create({
   statCard: {
    
     padding: 16,
-    borderRadius: 16,
     alignItems: 'center',
     width: '31%',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
+ 
   },
   statIconContainer: {
     width: 44,

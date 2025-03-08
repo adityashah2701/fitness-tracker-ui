@@ -148,7 +148,7 @@ export default function Profile() {
                 <ChevronRight size={20} color="#8c9eff" />
               </TouchableOpacity>
               
-              <TouchableOpacity style={styles.settingItem}  onPress={() => router.push('/')}>
+              <TouchableOpacity style={styles.settingItem}  onPress={() => router.push('/screens/about')}>
                 <View style={styles.settingLeft}>
                   <View style={[styles.iconCircle, {backgroundColor: 'rgba(66, 165, 245, 0.2)'}]}>
                     <Info size={18} color="#42a5f5" />
