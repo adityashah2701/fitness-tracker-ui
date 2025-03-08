@@ -1,10 +1,25 @@
-import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Activity, Clock, Dumbbell, Star, Zap, ChevronRight, Calendar, Bell } from 'lucide-react-native';
+import { Activity, Clock, Dumbbell, Star, Zap, ChevronRight, Calendar, Bell, Check } from 'lucide-react-native';
 import Animated, { FadeInUp, FadeInRight } from 'react-native-reanimated';
+import { router } from 'expo-router';
+import { useState, useEffect } from 'react';
 
 export default function Home() {
-  const workouts = [
+  // User state
+  const [userName, setUserName] = useState('John');
+  const [currentDate, setCurrentDate] = useState('');
+  const [greeting, setGreeting] = useState('');
+  
+  // Activity stats state
+  const [stats, setStats] = useState({
+    steps: 7234,
+    activeMinutes: 45,
+    calories: 320
+  });
+  
+  // Workouts state
+  const [workouts, setWorkouts] = useState([
     {
       id: 1,
       title: 'Full Body Workout',
@@ -14,13 +29,94 @@ export default function Home() {
       image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800',
       rating: 4.8
     }
-  ];
+  ]);
   
-  const classes = [
-    { id: 1, time: '10:00 AM', name: 'Yoga Basics', instructor: 'Sarah', color: '#7E57C2' },
-    { id: 2, time: '2:00 PM', name: 'HIIT Training', instructor: 'Jason', color: '#26A69A' },
-    { id: 3, time: '5:30 PM', name: 'Pilates Flow', instructor: 'Emma', color: '#EF5350' }
-  ];
+  // Classes state
+  const [classes, setClasses] = useState([
+    { id: 1, time: '10:00 AM', name: 'Yoga Basics', instructor: 'Sarah', color: '#7E57C2', joined: false },
+    { id: 2, time: '2:00 PM', name: 'HIIT Training', instructor: 'Jason', color: '#26A69A', joined: false },
+    { id: 3, time: '5:30 PM', name: 'Pilates Flow', instructor: 'Emma', color: '#EF5350', joined: false }
+  ]);
+  
+  // Loading states
+  const [isLoading, setIsLoading] = useState(false);
+  
+  // Notification state
+  const [hasNotifications, setHasNotifications] = useState(true);
+
+  // Set current date and greeting on component mount
+  useEffect(() => {
+    const now = new Date();
+    const options: Intl.DateTimeFormatOptions = { weekday: 'long', month: 'long', day: 'numeric' };
+    setCurrentDate(now.toLocaleDateString('en-US', options));
+    
+    const hour = now.getHours();
+    if (hour < 12) setGreeting('Good Morning!');
+    else if (hour < 18) setGreeting('Good Afternoon!');
+    else setGreeting('Good Evening!');
+    
+    // Simulate getting updated stats every minute
+    const intervalId = setInterval(() => {
+      setStats(prevStats => ({
+        steps: prevStats.steps + Math.floor(Math.random() * 10),
+        activeMinutes: prevStats.activeMinutes,
+        calories: prevStats.calories + Math.floor(Math.random() * 3)
+      }));
+    }, 60000);
+    
+    return () => clearInterval(intervalId);
+  }, []);
+  
+  // Handle joining a class
+  const handleJoinClass = (id: number) => {
+    setIsLoading(true);
+    
+    // Simulate API call with a timeout
+    setTimeout(() => {
+      setClasses(prevClasses => 
+        prevClasses.map(classItem => 
+          classItem.id === id ? { ...classItem, joined: !classItem.joined } : classItem
+        )
+      );
+      
+      // Find the class that was joined/unjoined
+      const classItem: any = classes.find(c => c.id === id);
+      
+      // Show confirmation message
+      if (!classItem.joined) {
+        Alert.alert(
+          "Class Joined!",
+          `You've successfully joined the ${classItem.name} class at ${classItem.time}.`,
+          [{ text: "OK" }]
+        );
+      }
+      
+      setIsLoading(false);
+    }, 800);
+  };
+  
+  // Start a workout
+  const startWorkout = (workoutId: number) => {
+    setIsLoading(true);
+    
+    // Simulate loading
+    setTimeout(() => {
+      setIsLoading(false);
+      Alert.alert(
+        "Workout Started",
+        "Get ready to begin your workout session!",
+        [{ text: "Let's Go!" }]
+      );
+      // In a real app, you would navigate to the workout screen
+      // router.push(`/workout/${workoutId}`);
+    }, 500);
+  };
+  
+  // Handle notification press
+  const goToNotifications = () => {
+    setHasNotifications(false);
+    router.push('/(tabs)/notifications');
+  };
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -32,15 +128,16 @@ export default function Home() {
       >
         <View style={styles.headerTop}>
           <View>
-            <Text style={styles.greeting}>Good Morning! John</Text>
-            <Text style={styles.date}>Monday, January 17</Text>
+            <Text style={styles.greeting}>{greeting} {userName}</Text>
+            <Text style={styles.date}>{currentDate}</Text>
           </View>
           <View style={styles.headerActions}>
             <TouchableOpacity style={styles.iconButton}>
               <Calendar size={20} color="#fff" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.iconButton}>
+            <TouchableOpacity onPress={goToNotifications} style={styles.iconButton}>
               <Bell size={20} color="#fff" />
+              {hasNotifications && <View style={styles.notificationBadge} />}
             </TouchableOpacity>
           </View>
         </View>
@@ -53,7 +150,7 @@ export default function Home() {
             <View style={styles.statIconContainer}>
               <Activity size={22} color="#7E57C2" />
             </View>
-            <Text style={styles.statValue}>7,234</Text>
+            <Text style={styles.statValue}>{stats.steps.toLocaleString()}</Text>
             <Text style={styles.statLabel}>Steps</Text>
           </View>
 
@@ -61,7 +158,7 @@ export default function Home() {
             <View style={[styles.statIconContainer, { backgroundColor: 'rgba(38, 166, 154, 0.15)' }]}>
               <Clock size={22} color="#26A69A" />
             </View>
-            <Text style={styles.statValue}>45</Text>
+            <Text style={styles.statValue}>{stats.activeMinutes}</Text>
             <Text style={styles.statLabel}>Active Min</Text>
           </View>
 
@@ -69,7 +166,7 @@ export default function Home() {
             <View style={[styles.statIconContainer, { backgroundColor: 'rgba(239, 83, 80, 0.15)' }]}>
               <Dumbbell size={22} color="#EF5350" />
             </View>
-            <Text style={styles.statValue}>320</Text>
+            <Text style={styles.statValue}>{stats.calories}</Text>
             <Text style={styles.statLabel}>Calories</Text>
           </View>
         </Animated.View>
@@ -89,7 +186,12 @@ export default function Home() {
           </View>
           
           {workouts.map((workout, index) => (
-            <TouchableOpacity key={workout.id} activeOpacity={0.9}>
+            <TouchableOpacity 
+              key={workout.id} 
+              activeOpacity={0.9}
+              onPress={() => startWorkout(workout.id)}
+              disabled={isLoading}
+            >
               <Animated.View 
                 entering={FadeInUp.delay(300 + index * 100).duration(500)}
                 style={styles.workoutCard}
@@ -125,8 +227,14 @@ export default function Home() {
                     </View>
                     <Text style={styles.instructorName}>Coach {workout.instructor}</Text>
                   </View>
-                  <TouchableOpacity style={styles.startButton}>
-                    <Text style={styles.startButtonText}>Start Workout</Text>
+                  <TouchableOpacity 
+                    style={styles.startButton}
+                    onPress={() => startWorkout(workout.id)}
+                    disabled={isLoading}
+                  >
+                    <Text style={styles.startButtonText}>
+                      {isLoading ? 'Loading...' : 'Start Workout'}
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </Animated.View>
@@ -179,9 +287,29 @@ export default function Home() {
                   <Text style={styles.classInstructor}>with {classItem.instructor}</Text>
                 </View>
                 <TouchableOpacity 
-                  style={[styles.joinButton, { backgroundColor: `${classItem.color}20` }]}
+                  style={[
+                    styles.joinButton, 
+                    { 
+                      backgroundColor: classItem.joined ? `${classItem.color}40` : `${classItem.color}20`,
+                    }
+                  ]}
+                  onPress={() => handleJoinClass(classItem.id)}
+                  disabled={isLoading}
                 >
-                  <Text style={[styles.joinButtonText, { color: classItem.color }]}>Join</Text>
+                  {isLoading && classItem.id === classes.find(c => !c.joined)?.id ? (
+                    <Text style={[styles.joinButtonText, { color: classItem.color }]}>Loading...</Text>
+                  ) : (
+                    <>
+                      {classItem.joined ? (
+                        <View style={styles.joinedContainer}>
+                          <Check size={14} color={classItem.color} style={styles.joinedIcon} />
+                          <Text style={[styles.joinButtonText, { color: classItem.color }]}>Joined</Text>
+                        </View>
+                      ) : (
+                        <Text style={[styles.joinButtonText, { color: classItem.color }]}>Join</Text>
+                      )}
+                    </>
+                  )}
                 </TouchableOpacity>
               </Animated.View>
             ))}
@@ -219,6 +347,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: 12,
+    position: 'relative',
+  },
+  notificationBadge: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#FF4D4F',
   },
   greeting: {
     fontSize: 24,
@@ -236,11 +374,9 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   statCard: {
-   
     padding: 16,
     alignItems: 'center',
     width: '31%',
- 
   },
   statIconContainer: {
     width: 44,
@@ -460,5 +596,13 @@ const styles = StyleSheet.create({
   joinButtonText: {
     fontSize: 14,
     fontWeight: '600',
+  },
+  joinedContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  joinedIcon: {
+    marginRight: 4,
   },
 });
