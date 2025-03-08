@@ -33,13 +33,13 @@ export default function Home() {
   
   // Classes state
   const [classes, setClasses] = useState([
-    { id: 1, time: '10:00 AM', name: 'Yoga Basics', instructor: 'Sarah', color: '#7E57C2', joined: false },
-    { id: 2, time: '2:00 PM', name: 'HIIT Training', instructor: 'Jason', color: '#26A69A', joined: false },
-    { id: 3, time: '5:30 PM', name: 'Pilates Flow', instructor: 'Emma', color: '#EF5350', joined: false }
+    { id: 1, time: '10:00 AM', name: 'Yoga Basics', instructor: 'Sarah', color: '#7E57C2', joined: false, loading: false },
+    { id: 2, time: '2:00 PM', name: 'HIIT Training', instructor: 'Jason', color: '#26A69A', joined: false, loading: false },
+    { id: 3, time: '5:30 PM', name: 'Pilates Flow', instructor: 'Emma', color: '#EF5350', joined: false, loading: false }
   ]);
   
-  // Loading states
-  const [isLoading, setIsLoading] = useState(false);
+  // Loading state for workout
+  const [workoutLoading, setWorkoutLoading] = useState(false);
   
   // Notification state
   const [hasNotifications, setHasNotifications] = useState(true);
@@ -69,39 +69,42 @@ export default function Home() {
   
   // Handle joining a class
   const handleJoinClass = (id: number) => {
-    setIsLoading(true);
+    // Set loading state for the specific class
+    setClasses(prevClasses => 
+      prevClasses.map(classItem => 
+        classItem.id === id ? { ...classItem, loading: true } : classItem
+      )
+    );
     
     // Simulate API call with a timeout
     setTimeout(() => {
       setClasses(prevClasses => 
         prevClasses.map(classItem => 
-          classItem.id === id ? { ...classItem, joined: !classItem.joined } : classItem
+          classItem.id === id ? { ...classItem, joined: !classItem.joined, loading: false } : classItem
         )
       );
       
       // Find the class that was joined/unjoined
-      const classItem: any = classes.find(c => c.id === id);
+      const classItem = classes.find(c => c.id === id);
       
       // Show confirmation message
-      if (!classItem.joined) {
+      if (classItem && !classItem.joined) {
         Alert.alert(
           "Class Joined!",
           `You've successfully joined the ${classItem.name} class at ${classItem.time}.`,
           [{ text: "OK" }]
         );
       }
-      
-      setIsLoading(false);
     }, 800);
   };
   
   // Start a workout
   const startWorkout = (workoutId: number) => {
-    setIsLoading(true);
+    setWorkoutLoading(true);
     
     // Simulate loading
     setTimeout(() => {
-      setIsLoading(false);
+      setWorkoutLoading(false);
       Alert.alert(
         "Workout Started",
         "Get ready to begin your workout session!",
@@ -190,7 +193,7 @@ export default function Home() {
               key={workout.id} 
               activeOpacity={0.9}
               onPress={() => startWorkout(workout.id)}
-              disabled={isLoading}
+              disabled={workoutLoading}
             >
               <Animated.View 
                 entering={FadeInUp.delay(300 + index * 100).duration(500)}
@@ -230,10 +233,10 @@ export default function Home() {
                   <TouchableOpacity 
                     style={styles.startButton}
                     onPress={() => startWorkout(workout.id)}
-                    disabled={isLoading}
+                    disabled={workoutLoading}
                   >
                     <Text style={styles.startButtonText}>
-                      {isLoading ? 'Loading...' : 'Start Workout'}
+                      {workoutLoading ? 'Loading...' : 'Start Workout'}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -294,9 +297,9 @@ export default function Home() {
                     }
                   ]}
                   onPress={() => handleJoinClass(classItem.id)}
-                  disabled={isLoading}
+                  disabled={classItem.loading}
                 >
-                  {isLoading && classItem.id === classes.find(c => !c.joined)?.id ? (
+                  {classItem.loading ? (
                     <Text style={[styles.joinButtonText, { color: classItem.color }]}>Loading...</Text>
                   ) : (
                     <>

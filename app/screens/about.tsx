@@ -7,38 +7,47 @@ import { router } from 'expo-router';
 
 const About = () => {
   const [checked, setChecked] = useState(false);
-
+  
   return (
-    <LinearGradient colors={['#0d1b2a', '#1b263b']} style={styles.container}>
-      {/* <Text style={{color: '#fff', fontSize: 30}}>About</Text> */}
+    <LinearGradient
+      colors={['#0a1535', '#111c42', '#162450']}
+      style={styles.container}
+    >
       <StatusBar barStyle="light-content" />
       
-      <Animated.View entering={FadeInUp.duration(500)} style={styles.header}>
+      {/* About */}
+      <Animated.View entering={FadeIn.delay(300).duration(1000)} style={styles.header}>
         <Text style={styles.title}>Welcome to Astra</Text>
         <Text style={styles.subtitle}>Your AI-powered fitness companion</Text>
       </Animated.View>
-
-      <Animated.View entering={FadeIn.delay(200).duration(600)} style={styles.content}>
+      
+      <Animated.View entering={FadeInUp.delay(600).duration(1000)} style={styles.content}>
         <Text style={styles.description}>
           Astra helps you achieve your fitness goals with personalized plans, real-time progress tracking, and AI-driven insights.
         </Text>
-
+        
         <Text style={styles.description}>
-          Whether you’re looking to build strength, improve endurance, or stay active, Astra is here to guide you every step of the way.
+          Whether you're looking to build strength, improve endurance, or stay active, Astra is here to guide you every step of the way.
         </Text>
-
+        
         <TouchableOpacity 
           style={styles.checkboxContainer} 
           onPress={() => setChecked(!checked)}
         >
-          {checked ? <CheckSquare size={28} color="#00df9a" /> : <Square size={28} color="#ffffff" />}
+          {checked ? 
+            <CheckSquare size={24} color="#00df9a" /> : 
+            <Square size={24} color="#a8b3cf" />
+          }
           <Text style={styles.checkboxText}>I commit to my fitness journey</Text>
         </TouchableOpacity>
-
-        <TouchableOpacity style={[styles.button, !checked && styles.buttonDisabled]} disabled={!checked}
-         onPress={() => {router.push('/(tabs)') }}>
+        
+        <TouchableOpacity 
+          style={[styles.button, !checked && styles.buttonDisabled]} 
+          disabled={!checked}
+          onPress={() => {router.push('/(tabs)')}}
+        >
           <Text style={styles.buttonText}>Get Started</Text>
-          <ArrowRight size={22} color="#fff" />
+          <ArrowRight size={20} color="#fff" />
         </TouchableOpacity>
       </Animated.View>
     </LinearGradient>
